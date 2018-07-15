@@ -1,0 +1,88 @@
+"","title","text","word_count","sentiment"
+"1","Little_Wing","Well she's walking through the clouds.",6,0.32659863237109
+"2","Little_Wing","With a circus mind that's running wild.",7,-0.0566946709513841
+"3","Little_Wing","Butterflies and zebras.",3,0
+"4","Little_Wing","And moonbeams and a fairy tale.",6,0
+"5","Little_Wing","That's all she ever thinks about.",6,0
+"6","Little_Wing","Riding the wind.",3,0
+"7","Little_Wing","When I'm sad she comes to me.",7,-0.188982236504614
+"8","Little_Wing","With a thousand smiles she gives to me free.",9,0.333333333333333
+"9","Little_Wing","It's alright she says, it's alright.",6,0
+"10","Little_Wing","Take anything you want from me Anything.",7,0
+"11","Little_Wing","Fly on little wing.",4,0
+"12","Little_Wing","Yeah, yeah, yeah.",3,0
+"13","Little_Wing","Fly on little wing.",4,0
+"14","Mary_Had_A_Little_Lamb","Mary had a little lamb.",5,0
+"15","Mary_Had_A_Little_Lamb","His fleece was white as snow.",6,0.163299316185545
+"16","Mary_Had_A_Little_Lamb","Everywhere that child went.",4,0.3
+"17","Mary_Had_A_Little_Lamb","Your little lamb was sure to go.",7,0
+"18","Mary_Had_A_Little_Lamb","He followed her to school one day.",7,0
+"19","Mary_Had_A_Little_Lamb","And broke the teacher's rule.",5,-0.335410196624968
+"20","Mary_Had_A_Little_Lamb","What a time did they have.",6,0
+"21","Mary_Had_A_Little_Lamb","That day at school.",4,0
+"22","Mary_Had_A_Little_Lamb","Tisket tasket baby.",3,0.346410161513775
+"23","Mary_Had_A_Little_Lamb","A green and yellow basket.",5,0
+"24","Mary_Had_A_Little_Lamb","Sent a letter to my baby.",6,0.244948974278318
+"25","Mary_Had_A_Little_Lamb","On my way I passed it.",6,0
+"26","Pride_And_Joy","Well you've heard about love givin' sight to the blind.",10,0.25298221281347
+"27","Pride_And_Joy","My baby's lovin' cause the sun to shine.",8,0.388908729652601
+"28","Pride_And_Joy","She's my sweet little thang, she's my pride and joy.",10,0.363661930919364
+"29","Pride_And_Joy","She's my sweet little baby, I'm her little lover boy.",10,0.132815661727072
+"30","Pride_And_Joy","Yeah I love my baby, heart and soul.",8,0.47729707730092
+"31","Pride_And_Joy","Love like ours won't never grow old.",7,0.396862696659689
+"32","Pride_And_Joy","She's my sweet little thang, she's my pride and joy.",10,0.363661930919364
+"33","Pride_And_Joy","She's my sweet little baby, I'm her little lover boy.",10,0.132815661727072
+"34","Pride_And_Joy","Yeah I love my lady, she's long and lean.",9,0.45
+"35","Pride_And_Joy","You mess with her, you'll see a man get mean.",10,-0.237170824512628
+"36","Pride_And_Joy","She's my sweet little thang, she's my pride and joy.",10,0.363661930919364
+"37","Pride_And_Joy","She's my sweet little baby, I'm her little lover boy.",10,0.132815661727072
+"38","Pride_And_Joy","Well I love my baby, like the finest wine.",9,1.05
+"39","Pride_And_Joy","Stick with her until the end of time.",8,0
+"40","Pride_And_Joy","She's my sweet little thang, she's my pride and joy.",10,0.363661930919364
+"41","Pride_And_Joy","She's my sweet little baby, I'm her little lover boy.",10,0.132815661727072
+"42","Pride_And_Joy","Yeah I love my baby, my heart and soul.",9,0.45
+"43","Pride_And_Joy","Love like ours won't never grow old.",7,0.396862696659689
+"44","Pride_And_Joy","She's my sweet little thang, she's my pride and joy.",10,0.363661930919364
+"45","Pride_And_Joy","She's my sweet little baby, I'm her little lover boy.",10,0.132815661727072
+"46","Texas_Flood","Well there's floodin' down in Texas.",6,0.32659863237109
+"47","Texas_Flood","All of the telephone lines are down.",7,0
+"48","Texas_Flood","Well there's floodin' down in Texas.",6,0.32659863237109
+"49","Texas_Flood","All of the telephone lines are down.",7,0
+"50","Texas_Flood","And I've been tryin' to call my baby.",8,0.212132034355964
+"51","Texas_Flood","Lord and I can't get a single sound.",8,0
+"52","Texas_Flood","Well dark clouds are rollin' in.",6,0.0816496580927726
+"53","Texas_Flood","Man I'm standin' out in the rain.",7,0
+"54","Texas_Flood","Well dark clouds are rollin' in.",6,0.0816496580927726
+"55","Texas_Flood","Man I'm standin' out in the rain.",7,0
+"56","Texas_Flood","Yeah flood water keep a rollin'.",6,0
+"57","Texas_Flood","Man it's about to drive poor me insane.",8,-0.441941738241592
+"58","Texas_Flood","Well I'm leavin' you baby.",5,0.626099033699941
+"59","Texas_Flood","Lord and I'm goin' back home to stay.",8,0
+"60","Texas_Flood","Well I'm leavin' you baby.",5,0.626099033699941
+"61","Texas_Flood","Lord and I'm goin' back home to stay.",8,0
+"62","Texas_Flood","Well back home are no floods or tornados.",8,0.565685424949238
+"63","Texas_Flood","Baby and the sun shines every day.",7,0.453557367611073
+"64","Tin_Pan_Alley","Went down to Tin Pan Alley.",6,-0.408248290463863
+"65","Tin_Pan_Alley","See what was going on.",5,0
+"66","Tin_Pan_Alley","Things was too hot down there.",6,-0.102062072615966
+"67","Tin_Pan_Alley","Couldn't stay very long.",4,0
+"68","Tin_Pan_Alley","Hey hey hey hey, Alley's the roughest place I've ever been.",11,0
+"69","Tin_Pan_Alley","All the people down there Livin' for their whiskey, wine, and gin.",12,0
+"70","Tin_Pan_Alley","I heard a woman scream.",5,-0.447213595499958
+"71","Tin_Pan_Alley","Yeah and I peeped through the door.",7,0
+"72","Tin_Pan_Alley","Some cat was workin' on Annie with a Lord with a two-by-four.",14,0
+"73","Tin_Pan_Alley","Hey hey hey hey, Alley's the roughest place I've ever been.",11,0
+"74","Tin_Pan_Alley","All the people down there.",5,0
+"75","Tin_Pan_Alley","Livin' for their whiskey, wine, and gin.",7,0
+"76","Tin_Pan_Alley","I heard a pistol shoot.",5,-0.402492235949962
+"77","Tin_Pan_Alley","Yeah and it was a .44.",5,0
+"78","Tin_Pan_Alley","Somebody killed a crap shooter cause he didn't Shake, rattle, and roll.",12,0.577350269189626
+"79","Tin_Pan_Alley","Hey hey hey hey, Alley's the roughest place I've ever been.",11,0
+"80","Tin_Pan_Alley","All the people down there.",5,0
+"81","Tin_Pan_Alley","Killin' for their whiskye, wine, and gin.",7,0
+"82","Tin_Pan_Alley","I saw a cop standing.",5,0
+"83","Tin_Pan_Alley","With his hand on his gun.",6,-0.204124145231932
+"84","Tin_Pan_Alley","He said ""this is a raid, boy Nobody run"".",9,-0.283333333333333
+"85","Tin_Pan_Alley","Hey hey hey hey, Alley's the roughest place I've ever been.",11,0
+"86","Tin_Pan_Alley","Yeah they took me away from Alley.",7,0
+"87","Tin_Pan_Alley","Lord they took me right back to the pen.",9,0.266666666666667

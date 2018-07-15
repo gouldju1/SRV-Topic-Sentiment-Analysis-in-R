@@ -1,0 +1,310 @@
+---
+title: "SRV_Analysis"
+author: "Justin A. Gould"
+date: "July 15, 2018"
+output: html_document
+---
+
+## Required Packages
+
+```{r}
+#install.packages("tm")
+#install.packages("topicmodels")
+#install.packages("sentimentr")
+#install.packages("wordcloud")
+#install.packages("sqldf")
+#install.packages("SnowballC")
+#install.packages("RColorBrewer")
+#install.packages("ggplot2")
+library(tm)
+library(topicmodels)
+library(sentimentr)
+library(wordcloud)
+library(sqldf)
+library(SnowballC)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+## Topic Modeling
+
+```{r}
+#Loading the individual song txt files into corpus
+setwd("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R")
+filenames = list.files(getwd(),pattern="*.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Creating the document-term matrix
+#Remove punctuation
+documents = tm_map(documents, removePunctuation)
+#Text to lower case
+documents = tm_map(documents,content_transformer(tolower))
+#Eliminate digits
+documents = tm_map(documents, removeNumbers)
+#Remove stopwords from standard stopword list 
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Create document-term matrix
+dtm = DocumentTermMatrix(documents)
+rownames(dtm) = filenames
+dtm
+
+#Run LDA to find topics in text (since I am using top 5 songs, I will use 5 topics)
+burnin = 1000
+iter = 2000
+thin = 500
+nstart = 5
+seed = list(365783, 210, 233998, 256730148, 3)
+best = TRUE
+k = 5
+ldaOut = LDA(dtm, k, method = "Gibbs", control = list(nstart = nstart, seed = seed, best = best, burnin = burnin, iter = iter, thin = thin))
+```
+
+
+# Reviewing the Topics from the LDA
+
+```{r}
+#Review the top 4 terms for each of the 5 topics from LDA
+terms(ldaOut,4)
+```
+
+
+# Assigning Topics to Documents
+
+```{r}
+topics(ldaOut)
+```
+
+From a high level, the topics reflect:
+
+Topic #1: With the use of the exclamation "hey," as well as a reference to alcohol and "roughest," the topic seems to be negative in nature.
+
+
+Topic #2: SRV uses "baby" quite often, in numerous contexts. For example, in live versions of "Lenny," despite having no lyrics, he explains that he wrote the song for his wife (his "baby"), Lenny. However, SRV also uses the word similar to "hey" and "yeah" -- as an exclamation. In fact, $50$% of the words in topic 2 are exclamation, suggesting that this topic is neither positive, nor negative, and that these songs are more bluesy, due to these exclamations.
+
+
+Topic #3: Topic 3 has an exclamation; however, with the use of "stay" and "anything," considering the rather melancholic mood of many of the songs from SRV's first album, which makes up $\frac{3}{5}$ of the songs used, the implication is someone or something may be leaving, and he is willing to do "anything" to get them/it to "stay."
+
+
+Topic #4: Topic 4, with the numerous references to romance, is positive. Although these words primarily come from the song "Pride and Joy," which is interesting, as this is the only song associated with that topic, topic 4 shows the romantic, amorous side of SRV and his music.
+
+
+Topic #5: These words really do not provide much meaning and insight; since none of the 5 songs have this topic, it will be ignored.
+
+
+## Sentiment Analysis
+
+```{r}
+#Loading the csv containing all lyrics, aggregated at sentence-level, by song title
+lyrics = read.csv("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\lyrics.csv", header = T, sep = ",")
+lyrics$title = as.character(lyrics$title)
+lyrics$text = as.character(lyrics$text)
+lyrics$rowNum = 1:nrow(lyrics)
+
+#Running the sentiment analysis
+textSen = data.frame(sentiment(lyrics$text))
+
+#JOINing the sentiment scores ON the lyrics data.frame
+lyrics = sqldf("SELECT lyrics.*, textSen.word_count AS word_count, textSen.sentiment AS sentiment FROM lyrics, textSen WHERE lyrics.rowNum = textSen.element_id")
+lyrics$rowNum = NULL
+
+#Average sentiment score aggregated by song
+avgScore = sqldf("SELECT title, avg(sentiment) AS avgSentiment, sum(word_count) AS total_words FROM lyrics GROUP BY title")
+avgScore
+lyrics
+write.csv(lyrics, "C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\lyricsSENTIMENT.csv")
+```
+
+The higher a sentiment score, the more positive a song; the lower, the more negative.
+
+The result of the average sentiment score by song title reveals:
+
+"Little Wing": slightly positive
+This result makes sense. The song makes numerous references to a guardian angel-like figure, but through metaphorical passages, so the algorithm had a tough time picking up on the nuances of the lyrics, but successfully detected positivity associated with the lyrics.
+
+
+"Mary Had a Little Lamb": slightly positive
+This result makes sense. "Mary Had a Little Lamb" is SRV's take on the nursery rhyme, and successfully detected the positivity in the lyrics.
+
+
+"Pride and Joy": quite positive
+This is the most accurate result of the 5. "Pride and Joy" is essentially a declaration of love, in which SRV states his emphtic love for a woman who is his "Pride and Joy"!
+
+
+"Texas Flood": positive
+Unfortunately, the sentimentr package, and all sentiment analyses come with drawbacks. SRV's "Texas Flood" is neither a negative nor a positive song. With its numerous references to deadly storms in Texas, there is a great deal of negativity in the song, which the algorithm typically successfully detected and classified; however, SRV states how he wants to leave his "baby," Texas is personified, here, for a safer land without fear of "tornadoes." SRV's leaving could be interpreted negatively (leaving his personified home), or as positive (embarking on a new journey to better his safety.) With the ambiguity in this song, I expected the sentiment score $= 0 \pm 0.025$.
+
+
+"Tin Pan Alley": slightly negative
+This song is definitely negative, with numerous references to violence, police brutality, and other issues in "Tin Pan Alley," which was a community of New York City music publishers who monopolized popular US music of the early 20th century. Essentially, the song is metaphorical, in the sense that it is SRV's anthem of the difficulty associated with the music industry -- from getting his break through continuously rotating new music into his set list during performances.
+
+## Relationship between word_count and sentiment
+
+I hypothesize that there will be no relationship between a sentence's word count, and its assigned sentiment score.
+
+```{r}
+lyrics$title = as.factor(lyrics$title)
+myColors = brewer.pal(5,"Set1")
+names(myColors) = levels(lyrics$title)
+colScale <- scale_colour_manual(name = "title",values = myColors)
+j = ggplot(lyrics, aes(word_count, sentiment, colour = title))
+wordCountSen = j + geom_point() + labs(x = "Word Count", y = "Sentiment Score", title = "Sentiment Score by Sentence Word Count") + scale_x_continuous(breaks = seq(1,15,1))
+wordCountSen
+```
+
+No relationship; my hypothesis was correct!
+
+
+# Word Clouds
+
+## Pride and Joy
+
+```{r}
+#Import the lyrics
+filenames = list("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\prideAndJoy.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Preprocessing/preparing the data
+#Convert the text to lower case
+documents = tm_map(documents, content_transformer(tolower))
+#Remove numbers
+documents = tm_map(documents, removeNumbers)
+#Remove english common stopwords
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Remove punctuation
+documents <- tm_map(documents, removePunctuation)
+
+#Document term matrix creation
+dtm = TermDocumentMatrix(documents)
+m = as.matrix(dtm)
+v = sort(rowSums(m), decreasing = TRUE)
+d = data.frame(word = names(v), freq = v)
+
+#Build the word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+```
+
+As previously stated, "Pride and Joy" is essentially a declaration of love, and the word cloud reflects that, too. The song's most frequently-used words, within the context of the song, are multiple references to romance, his love, etc.
+
+## Little Wing
+
+```{r}
+#Import the lyrics
+filenames = list("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\littleWing.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Preprocessing/preparing the data
+#Convert the text to lower case
+documents = tm_map(documents, content_transformer(tolower))
+#Remove numbers
+documents = tm_map(documents, removeNumbers)
+#Remove english common stopwords
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Remove punctuation
+documents <- tm_map(documents, removePunctuation)
+
+#Document term matrix creation
+dtm = TermDocumentMatrix(documents)
+m = as.matrix(dtm)
+v = sort(rowSums(m), decreasing = TRUE)
+d = data.frame(word = names(v), freq = v)
+
+#Build the word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+```
+
+At the center of this word cloud is "yeah," an exclamation -- especially in the world of Blues. This provides the implication that the song is extra-bluesy, which makes sense, as it is the SRV (Blues) take on Jimi Hendrix's "Little Wing," which was a blues-inspired ballad, instead of a more psychedelic-focused mood. SRV brings that out in his take on "Little Wing," and the word cloud reflects that.
+
+## Mary Had a Little Lamb
+
+```{r}
+#Import the lyrics
+filenames = list("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\maryHadALittleLamb.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Preprocessing/preparing the data
+#Convert the text to lower case
+documents = tm_map(documents, content_transformer(tolower))
+#Remove numbers
+documents = tm_map(documents, removeNumbers)
+#Remove english common stopwords
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Remove punctuation
+documents <- tm_map(documents, removePunctuation)
+
+#Document term matrix creation
+dtm = TermDocumentMatrix(documents)
+m = as.matrix(dtm)
+v = sort(rowSums(m), decreasing = TRUE)
+d = data.frame(word = names(v), freq = v)
+
+#Build the word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+```
+
+
+## Texas Flood
+
+```{r}
+#Import the lyrics
+filenames = list("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\texasFlood.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Preprocessing/preparing the data
+#Convert the text to lower case
+documents = tm_map(documents, content_transformer(tolower))
+#Remove numbers
+documents = tm_map(documents, removeNumbers)
+#Remove english common stopwords
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Remove punctuation
+documents <- tm_map(documents, removePunctuation)
+
+#Document term matrix creation
+dtm = TermDocumentMatrix(documents)
+m = as.matrix(dtm)
+v = sort(rowSums(m), decreasing = TRUE)
+d = data.frame(word = names(v), freq = v)
+
+#Build the word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+```
+
+
+## Tin Pan Alley (AKA Roughest Place in Town)
+
+```{r}
+#Import the lyrics
+filenames = list("C:\\Users\\gould\\Documents\\Developer\\SRV-Topic-Sentiment-Analysis-in-R\\tinPanAlley.txt")
+files = lapply(filenames,readLines)
+documents = Corpus(VectorSource(files))
+
+#Preprocessing/preparing the data
+#Convert the text to lower case
+documents = tm_map(documents, content_transformer(tolower))
+#Remove numbers
+documents = tm_map(documents, removeNumbers)
+#Remove english common stopwords
+documents = tm_map(documents, removeWords, stopwords("english"))
+#Remove punctuation
+documents <- tm_map(documents, removePunctuation)
+
+#Document term matrix creation
+dtm = TermDocumentMatrix(documents)
+m = as.matrix(dtm)
+v = sort(rowSums(m), decreasing = TRUE)
+d = data.frame(word = names(v), freq = v)
+
+#Build the word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+```
+
