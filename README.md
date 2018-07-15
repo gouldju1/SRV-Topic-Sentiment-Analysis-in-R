@@ -24,4 +24,4 @@ The following packages are required to use the SRV topic and sentiment analysis 
 
 Please see the R Markdown file for code and analysis.
 
-The results of the analysis are located in the SRV_Analysis_RESULTS.pdf
+*The results of the analysis are located in the SRV_Analysis_RESULTS.pdf*
