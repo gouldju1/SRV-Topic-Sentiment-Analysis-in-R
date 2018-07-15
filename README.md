@@ -18,8 +18,12 @@ To compile the data, I use Excel and Notepad to copy and paste lyrics from the i
 
 ### Required Packages
 
-The following packages are required to use the SRV topic and sentiment analysis code: tm, wordcloud, sentimentr, topicmodels, SnowballC, RColorBrewer.
- 
+The following packages are required to use the SRV topic and sentiment analysis code:
+
+```
+tm, wordcloud, sentimentr, topicmodels, SnowballC, RColorBrewer, sqldf, ggplot2
+```
+
 ### Interpreting the Results
 
 Please see the R Markdown file for code and analysis.
