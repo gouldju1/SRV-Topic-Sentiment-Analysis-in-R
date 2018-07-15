@@ -14,7 +14,7 @@ To perform these analyses, each song will be its own document, and I will be usi
 
 The first 4 of these songs have lyrics; however, "Lenny" does not. Therefore, I will use the #6 song, "Tin Pan Alley (AKA Roughest Place in Town)."
 
-To compile the data, I use Excel and Notepad to copy and paste lyrics from the internet. In the Excel, for example, each phrase/sentence is an obersvation, identified by song title as the primary key of the table.
+To compile the data, I use Excel and Notepad to copy and paste lyrics from the internet. In the Excel, for example, each phrase/sentence is an observation, identified by song title as the primary key of the table.
 
 ### Required Packages
 
